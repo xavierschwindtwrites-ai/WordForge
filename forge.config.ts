@@ -15,17 +15,23 @@ import { rendererConfig } from './webpack.renderer.config';
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
+    // Electron Packager appends the right extension per platform
+    // (icon.icns on macOS, icon.ico on Windows).
+    icon: './icons/icon',
     extraResource: [
       './node_modules/sql.js/dist/sql-asm.js',
     ],
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
+    new MakerSquirrel({
+      setupIcon: './icons/icon.ico',
+    }),
     new MakerDMG({
       // A clean drag-to-Applications window: the app icon on the left, the
       // Applications shortcut on the right. One drag and you're installed.
       name: 'WordForge',
+      icon: './icons/icon.icns',
       overwrite: true,
       additionalDMGOptions: {
         window: { size: { width: 540, height: 380 } },
