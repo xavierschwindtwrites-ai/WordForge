@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WordForge — A writing tracker for novelists</title>
+<meta name="description" content="WordForge is a beautiful, privacy-first desktop word count tracker for fiction authors. Track drafts, streaks, sprints and deadlines — 100% local, no accounts, free and open source." />
+
+<!-- Open Graph -->
+<meta property="og:title" content="WordForge — A writing tracker for novelists" />
+<meta property="og:description" content="A beautiful, privacy-first word count tracker for fiction authors. 100% local. Free & open source." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://xavierschwindtwrites-ai.github.io/WordForge/" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M25 6C18 9 12 15 9 22l-2 4 4-2c7-3 13-9 16-16l-2 0Z' fill='%23c9a84c'/%3E%3Ccircle cx='24' cy='24.5' r='1.6' fill='%23c9a84c'/%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+:root{
+  --bg:#0f0f0f; --bg-2:#141312; --bg-card:#1c1b19; --bg-card-2:#232220;
+  --border:#2c2b28; --border-soft:#242320;
+  --text:#f5f0e8; --dim:#b8b0a2; --faint:#7a746a;
+  --accent:#c9a84c; --accent-br:#e0bf63; --accent-dim:rgba(201,168,76,.16); --glow:rgba(201,168,76,.35);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --ui:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --maxw:1140px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--ui); background:var(--bg); color:var(--text);
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--glow);color:#fff}
+img{max-width:100%}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.eyebrow{font-size:13px;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent);font-weight:600}
+.serif{font-family:var(--serif)}
+
+/* glowing background field */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(800px 480px at 78% -8%, rgba(201,168,76,.10), transparent 60%),
+    radial-gradient(700px 600px at 8% 110%, rgba(201,168,76,.06), transparent 55%);
+}
+.page{position:relative;z-index:1}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:14px 24px;border-radius:11px;font-weight:700;font-size:15px;
+  border:1px solid transparent;transition:transform .14s,box-shadow .25s,border-color .2s,background .2s;
+  cursor:pointer;white-space:nowrap;
+}
+.btn-primary{background:linear-gradient(180deg,var(--accent-br),var(--accent));color:#1a1407}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 28px var(--glow)}
+.btn-ghost{background:transparent;border-color:var(--border);color:var(--dim)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent-br);background:var(--accent-dim)}
+.btn svg{width:18px;height:18px}
+.btn small{font-weight:500;opacity:.7;font-size:12px}
+
+/* ---------- Nav ---------- */
+header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+  background:rgba(15,15,15,.72);border-bottom:1px solid var(--border-soft)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--serif);font-size:23px;font-weight:700}
+.brand svg{width:28px;height:28px;color:var(--accent);filter:drop-shadow(0 0 6px var(--glow))}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:14.5px;color:var(--dim);font-weight:500;transition:color .15s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{padding:9px 18px;font-size:14px}
+@media(max-width:720px){.nav-links a:not(.nav-cta){display:none}}
+
+/* ---------- Hero ---------- */
+.hero{padding:96px 0 70px;text-align:center}
+.hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(46px,7vw,82px);line-height:1.02;letter-spacing:.5px;margin:22px 0 0}
+.hero h1 .accent{color:var(--accent-br);font-style:italic}
+.hero .sub{max-width:620px;margin:24px auto 0;font-size:19px;color:var(--dim)}
+.hero-cta{display:flex;gap:14px;justify-content:center;margin-top:38px;flex-wrap:wrap}
+.trust{display:flex;gap:10px 26px;justify-content:center;flex-wrap:wrap;margin-top:34px;color:var(--faint);font-size:13.5px;font-weight:500}
+.trust span{display:flex;align-items:center;gap:7px}
+.trust .dot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+
+/* ---------- App mockup ---------- */
+.showcase{margin:64px auto 0;max-width:1000px;padding:0 28px;perspective:1800px}
+.window{
+  border-radius:16px;overflow:hidden;border:1px solid var(--border);
+  background:var(--bg-2);
+  box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.02),0 0 80px rgba(201,168,76,.07);
+  transform:rotateX(4deg);transform-origin:top center;
+}
+.titlebar{height:38px;background:#100f0e;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid var(--border-soft)}
+.tb-dot{width:11px;height:11px;border-radius:50%}
+.tb-dot.r{background:#e06a5a}.tb-dot.y{background:#e3b24c}.tb-dot.g{background:#67c279}
+.tb-title{margin-left:12px;font-size:12px;color:var(--faint)}
+.app{display:grid;grid-template-columns:200px 1fr;min-height:430px}
+.app-side{background:linear-gradient(180deg,#141312,#0d0c0b);border-right:1px solid var(--border);padding:18px 12px;display:flex;flex-direction:column;gap:14px}
+.app-side .s-brand{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:17px;font-weight:700;padding:4px}
+.app-side .s-brand svg{width:20px;height:20px;color:var(--accent)}
+.s-log{background:linear-gradient(180deg,var(--accent-br),var(--accent));color:#1a1407;border-radius:8px;padding:9px;text-align:center;font-weight:700;font-size:12.5px}
+.s-nav{display:flex;flex-direction:column;gap:3px;margin-top:4px}
+.s-item{padding:8px 11px;border-radius:7px;font-size:12.5px;color:var(--dim)}
+.s-item.on{background:var(--accent-dim);color:var(--accent-br);font-weight:600}
+.app-main{padding:24px 26px}
+.am-eyebrow{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent);font-weight:600}
+.am-title{font-family:var(--serif);font-size:27px;font-weight:600;margin:3px 0 18px}
+.am-hero{display:grid;grid-template-columns:200px 1fr;gap:16px}
+.am-ring-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.ring{position:relative;width:128px;height:128px;display:flex;align-items:center;justify-content:center}
+.ring .rnum{position:absolute;font-family:var(--serif);font-size:30px;font-weight:700}
+.ring .rsub{position:absolute;margin-top:42px;font-size:10px;color:var(--faint)}
+.am-stats{display:flex;flex-direction:column;gap:12px}
+.am-stat{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px 18px}
+.am-stat.accent{border-color:rgba(201,168,76,.4);background:linear-gradient(180deg,rgba(201,168,76,.08),var(--bg-card))}
+.am-stat .l{font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--dim);font-weight:600}
+.am-stat .v{font-family:var(--serif);font-size:27px;font-weight:700;line-height:1.1}
+.am-stat .v small{font-family:var(--ui);font-size:11px;color:var(--faint);font-weight:500}
+.am-proj{margin-top:18px;display:flex;flex-direction:column;gap:9px}
+.am-row{background:var(--bg-card);border:1px solid var(--border);border-radius:11px;padding:13px 16px}
+.am-row .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px}
+.am-row .top b{font-weight:600}.am-row .top span{color:var(--dim);font-size:12px}
+.track{height:7px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-br));border-radius:99px;box-shadow:0 0 10px var(--glow)}
+@media(max-width:760px){.app{grid-template-columns:1fr}.app-side{display:none}.am-hero{grid-template-columns:1fr}.window{transform:none}}
+
+/* ---------- Sections ---------- */
+section.band{padding:96px 0}
+.section-head{text-align:center;max-width:640px;margin:0 auto 56px}
+.section-head h2{font-family:var(--serif);font-size:clamp(34px,5vw,50px);font-weight:600;line-height:1.08;margin-top:12px}
+.section-head p{color:var(--dim);font-size:18px;margin-top:14px}
+
+/* feature grid */
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:880px){.features{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.features{grid-template-columns:1fr}}
+.feature{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:28px;transition:border-color .18s,transform .18s,box-shadow .25s}
+.feature:hover{border-color:rgba(201,168,76,.4);transform:translateY(-3px);box-shadow:0 16px 50px rgba(0,0,0,.4)}
+.feature .ficon{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--accent-dim);color:var(--accent-br);margin-bottom:18px}
+.feature .ficon svg{width:24px;height:24px}
+.feature h3{font-family:var(--serif);font-size:23px;font-weight:600;margin-bottom:7px}
+.feature p{color:var(--dim);font-size:14.5px}
+
+/* alternating showcase rows */
+.alt{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-bottom:96px}
+.alt:last-child{margin-bottom:0}
+.alt.rev .alt-text{order:2}
+@media(max-width:840px){.alt{grid-template-columns:1fr;gap:32px}.alt.rev .alt-text{order:0}}
+.alt-text h3{font-family:var(--serif);font-size:34px;font-weight:600;line-height:1.1;margin:12px 0 14px}
+.alt-text p{color:var(--dim);font-size:16.5px}
+.alt-text ul{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:10px}
+.alt-text li{display:flex;gap:11px;align-items:flex-start;color:var(--dim);font-size:15px}
+.alt-text li svg{width:19px;height:19px;color:var(--accent);flex-shrink:0;margin-top:2px}
+.panel{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:26px;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+.panel h4{font-family:var(--serif);font-size:20px;font-weight:600;margin-bottom:16px}
+
+/* contribution grid demo */
+.contrib{display:flex;gap:3px;flex-wrap:wrap}
+.contrib i{width:13px;height:13px;border-radius:3px;display:block}
+.contrib-legend{display:flex;align-items:center;gap:5px;margin-top:14px;font-size:11px;color:var(--faint)}
+.contrib-legend i{width:13px;height:13px;border-radius:3px}
+
+/* pace rows */
+.pace .pr{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--border-soft)}
+.pace .pr:last-child{border:none}
+.pace .pr .pl{color:var(--dim);font-size:14px}
+.pace .pr .pv{font-weight:600}
+.pace .pr.hl .pv{color:var(--accent-br);font-family:var(--serif);font-size:21px}
+
+/* sprint demo */
+.sprint-demo{display:flex;flex-direction:column;align-items:center;gap:18px;padding:14px 0}
+.sprint-ring{width:160px;height:160px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;
+  background:conic-gradient(var(--accent) 220deg,rgba(255,255,255,.05) 0)}
+.sprint-ring::before{content:'';position:absolute;inset:11px;border-radius:50%;background:var(--bg-card)}
+.sprint-ring b{position:relative;font-family:var(--serif);font-size:44px;font-weight:700}
+.sprint-presets{display:flex;gap:8px}
+.sprint-presets span{padding:6px 13px;border:1px solid var(--border);border-radius:99px;font-size:12px;color:var(--dim)}
+.sprint-presets span.on{background:var(--accent-dim);border-color:var(--accent);color:var(--accent-br);font-weight:600}
+
+/* ---------- Download ---------- */
+.download{text-align:center}
+.dl-box{background:linear-gradient(160deg,rgba(201,168,76,.10),var(--bg-card));border:1px solid rgba(201,168,76,.32);border-radius:20px;padding:54px 40px;max-width:760px;margin:0 auto}
+.dl-box h2{font-family:var(--serif);font-size:clamp(32px,4.5vw,46px);font-weight:600}
+.dl-box p{color:var(--dim);font-size:17px;margin-top:12px}
+.dl-btns{display:flex;gap:14px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+.dl-note{margin-top:24px;font-size:13px;color:var(--faint);max-width:520px;margin-left:auto;margin-right:auto}
+.dl-note code{background:rgba(255,255,255,.06);padding:2px 7px;border-radius:5px;color:var(--accent-br);font-size:12.5px}
+.dl-note a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+
+/* ---------- Footer ---------- */
+footer{border-top:1px solid var(--border-soft);padding:46px 0;margin-top:30px}
+.foot-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.foot-brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:20px;font-weight:700}
+.foot-brand svg{width:24px;height:24px;color:var(--accent)}
+.foot-links{display:flex;gap:26px;font-size:14px;color:var(--dim)}
+.foot-links a:hover{color:var(--accent-br)}
+.foot-meta{color:var(--faint);font-size:13px;margin-top:8px;width:100%}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 32 32" fill="none"><path d="M25 6C18 9 12 15 9 22l-2 4 4-2c7-3 13-9 16-16l-2 0Z" fill="currentColor" opacity=".92"/><path d="M9 22l4 4" stroke="#0f0f0f" stroke-width="1.4" stroke-linecap="round"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M24 22v5"/><path d="M21.5 24.5h5"/></g><circle cx="24" cy="24.5" r="1.3" fill="currentColor"/></svg>
+      WordForge
+    </a>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#analytics">Analytics</a>
+      <a href="#download">Download</a>
+      <a href="https://github.com/xavierschwindtwrites-ai/WordForge" target="_blank" rel="noreferrer">GitHub</a>
+      <a class="btn btn-primary nav-cta" id="navDownload" href="#download">Download</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<a id="top"></a>
+<section class="hero wrap">
+  <p class="eyebrow">For novelists, by novelists</p>
+  <h1>Write every day.<br/>Watch it <span class="accent">add up.</span></h1>
+  <p class="sub">WordForge is a beautiful, privacy-first word count tracker for fiction authors. Log your sessions, build unbroken streaks, sprint against the clock, and watch your manuscript take shape — all on your own machine.</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" id="heroDownload" href="#download">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+      <span id="heroDownloadLabel">Download for Mac<small id="heroDownloadSub"> · free</small></span>
+    </a>
+    <a class="btn btn-ghost" href="https://github.com/xavierschwindtwrites-ai/WordForge" target="_blank" rel="noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49l-.01-1.7c-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.55-1.14-4.55-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.34 9.34 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9l-.01 2.82c0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>
+      Star on GitHub
+    </a>
+  </div>
+  <div class="trust">
+    <span><i class="dot"></i> 100% local</span>
+    <span><i class="dot"></i> No accounts, ever</span>
+    <span><i class="dot"></i> Nothing leaves your Mac</span>
+    <span><i class="dot"></i> Free &amp; open source (MIT)</span>
+  </div>
+</section>
+
+<!-- APP MOCKUP -->
+<div class="showcase reveal">
+  <div class="window">
+    <div class="titlebar"><i class="tb-dot r"></i><i class="tb-dot y"></i><i class="tb-dot g"></i><span class="tb-title">WordForge</span></div>
+    <div class="app">
+      <aside class="app-side">
+        <div class="s-brand"><svg viewBox="0 0 32 32"><path d="M25 6C18 9 12 15 9 22l-2 4 4-2c7-3 13-9 16-16l-2 0Z" fill="currentColor"/></svg>WordForge</div>
+        <div class="s-log">+ Log Session</div>
+        <div class="s-nav">
+          <div class="s-item on">Dashboard</div>
+          <div class="s-item">Projects</div>
+          <div class="s-item">Analytics</div>
+          <div class="s-item">Sprint</div>
+          <div class="s-item">Settings</div>
+        </div>
+      </aside>
+      <main class="app-main">
+        <div class="am-eyebrow">Good evening, writer</div>
+        <div class="am-title">Today at the desk</div>
+        <div class="am-hero">
+          <div class="am-ring-card">
+            <div class="ring">
+              <svg width="128" height="128"><circle cx="64" cy="64" r="56" stroke="rgba(255,255,255,.07)" stroke-width="11" fill="none"/><circle cx="64" cy="64" r="56" stroke="#c9a84c" stroke-width="11" fill="none" stroke-linecap="round" stroke-dasharray="351.8" stroke-dashoffset="84" transform="rotate(-90 64 64)" style="filter:drop-shadow(0 0 6px rgba(201,168,76,.4))"/></svg>
+              <span class="rnum">1,240</span><span class="rsub">of 1,500 words</span>
+            </div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--accent-br)">83%</div>
+          </div>
+          <div class="am-stats">
+            <div class="am-stat accent"><div class="l">🔥 Current streak</div><div class="v">14 <small>days</small></div></div>
+            <div class="am-stat"><div class="l">Longest streak</div><div class="v">31 <small>days</small></div></div>
+            <div class="am-stat"><div class="l">Best day this month</div><div class="v">3,820 <small>words</small></div></div>
+          </div>
+        </div>
+        <div class="am-proj">
+          <div class="am-row"><div class="top"><b>The Hollow Crown</b><span>62,400 / 90,000</span></div><div class="track"><div class="fill" style="width:69%"></div></div></div>
+          <div class="am-row"><div class="top"><b>Saltwater Saints</b><span>18,900 / 80,000</span></div><div class="track"><div class="fill" style="width:24%"></div></div></div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="band" id="features">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Everything a working writer needs</p>
+      <h2>A high-end writing instrument — not another productivity app.</h2>
+      <p>Designed to feel like a well-made notebook: quiet, warm, and built to make showing up every day feel good.</p>
+    </div>
+    <div class="features">
+      <div class="feature reveal">
+        <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></div>
+        <h3>Daily dashboard</h3>
+        <p>Today's words against your goal, your live streak, and every active project's pace — the moment you open the app.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+        <h3>Pace calculator</h3>
+        <p>"At your current pace, you'll finish on March 14th." Set a deadline and WordForge tells you exactly how many words a day it takes.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h3>Rich analytics</h3>
+        <p>A full-year contribution grid, words-per-day charts, best-weekday heatmaps, and all-time stats that make progress impossible to ignore.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M9 2h6"/></svg></div>
+        <h3>Sprint mode</h3>
+        <p>15, 25, 45, or 60-minute focus sprints with a gentle chime when time's up — then log your words in a single tap.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2Z"/><path d="M8 3v18"/></svg></div>
+        <h3>Drafts &amp; milestones</h3>
+        <p>Track multiple projects and drafts. Cross 10k, 25k, 50k, 75k, 100k and your target — each one a small celebration.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="ficon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>Truly yours</h3>
+        <p>No cloud, no sign-up, no telemetry. Your data is one local file you can export to CSV or JSON — or drop into iCloud yourself.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANALYTICS SHOWCASE -->
+<section class="band" id="analytics" style="background:linear-gradient(180deg,transparent,rgba(255,255,255,.012),transparent)">
+  <div class="wrap">
+    <div class="alt reveal">
+      <div class="alt-text">
+        <p class="eyebrow">The long view</p>
+        <h3>A year of writing, at a glance.</h3>
+        <p>Every square is a day. Watch the gold spread across the calendar as the habit takes hold — the most motivating picture a writer can have.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Full-year contribution grid</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Best-day, monthly totals &amp; words-per-hour</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> All-time totals and your longest streak ever</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h4>A year of writing</h4>
+        <div class="contrib" id="contribGrid"></div>
+        <div class="contrib-legend">Less <i style="background:rgba(255,255,255,.05)"></i><i style="background:rgba(201,168,76,.3)"></i><i style="background:rgba(201,168,76,.5)"></i><i style="background:rgba(201,168,76,.75)"></i><i style="background:#e0bf63"></i> More</div>
+      </div>
+    </div>
+
+    <div class="alt rev reveal">
+      <div class="alt-text">
+        <p class="eyebrow">Know your finish line</p>
+        <h3>The deadline math, done for you.</h3>
+        <p>Tell WordForge your target and deadline. It does the rest — every day, recalculating exactly what it takes to get there.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Projected finish date at your real pace</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Daily words needed to hit any deadline</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Honest averages from your session history</li>
+        </ul>
+      </div>
+      <div class="panel pace">
+        <h4>The Hollow Crown · Draft 2</h4>
+        <div class="pr"><span class="pl">At your current pace, you'll finish</span><span class="pv">Aug 21, 2026</span></div>
+        <div class="pr"><span class="pl">Average so far</span><span class="pv">1,180 words/day</span></div>
+        <div class="pr"><span class="pl">Deadline</span><span class="pv">Sep 1, 2026</span></div>
+        <div class="pr hl"><span class="pl">To hit your deadline, write</span><span class="pv">920 words/day</span></div>
+      </div>
+    </div>
+
+    <div class="alt reveal">
+      <div class="alt-text">
+        <p class="eyebrow">Heads-down writing</p>
+        <h3>Sprint, then log it.</h3>
+        <p>Pick a length, start the timer, and write until the chime. WordForge nudges you to log what you wrote the second you're done.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> 15 / 25 / 45 / 60-minute presets</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> A clean, distraction-free countdown</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Sprints flagged in your session history</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="sprint-demo">
+          <div class="sprint-presets"><span>15m</span><span class="on">25m</span><span>45m</span><span>60m</span></div>
+          <div class="sprint-ring"><b>18:42</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section class="band download" id="download">
+  <div class="wrap">
+    <div class="dl-box reveal">
+      <p class="eyebrow">Free forever</p>
+      <h2>Start your streak today.</h2>
+      <p>One file. No account. Open it and write.</p>
+      <div class="dl-btns">
+        <a class="btn btn-primary" id="dlMac" href="https://github.com/xavierschwindtwrites-ai/WordForge/releases/latest" target="_blank" rel="noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.8ZM14.2 5.9c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.8 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.5 2.8-1.3Z"/></svg>
+          Download for Mac
+        </a>
+        <a class="btn btn-ghost" id="dlWin" href="https://github.com/xavierschwindtwrites-ai/WordForge/releases/latest" target="_blank" rel="noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.5 4.4v7.1H3V5.5Zm0 13L10.5 19.6v-7H3v6.9Zm8.5 1.2L21 21V12.5h-9.5v7.2Zm0-15.4v7.2H21V3l-9.5 1.3Z"/></svg>
+          Download for Windows
+        </a>
+      </div>
+      <p class="dl-note" id="dlNote">
+        macOS is unsigned (no Apple fee, no catch). First launch only: open Terminal and run
+        <code>xattr -cr /Applications/WordForge.app</code>, then it opens normally forever after.
+        Full instructions are in the <a href="https://github.com/xavierschwindtwrites-ai/WordForge/releases/latest" target="_blank" rel="noreferrer">release notes</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap foot-inner">
+    <div>
+      <div class="foot-brand"><svg viewBox="0 0 32 32"><path d="M25 6C18 9 12 15 9 22l-2 4 4-2c7-3 13-9 16-16l-2 0Z" fill="currentColor"/></svg>WordForge</div>
+      <div class="foot-meta">A privacy-first word count tracker for fiction authors. © 2026 · MIT License.</div>
+    </div>
+    <div class="foot-links">
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
+      <a href="https://github.com/xavierschwindtwrites-ai/WordForge" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://github.com/xavierschwindtwrites-ai/WordForge/releases" target="_blank" rel="noreferrer">Releases</a>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+const REPO = 'xavierschwindtwrites-ai/WordForge';
+const RELEASES = `https://github.com/${REPO}/releases`;
+const LATEST = `${RELEASES}/latest`;
+
+// --- Contribution grid demo (seeded so it looks organic but consistent) ---
+(function(){
+  const grid = document.getElementById('contribGrid');
+  if(!grid) return;
+  const colors = ['rgba(255,255,255,.05)','rgba(201,168,76,.3)','rgba(201,168,76,.5)','rgba(201,168,76,.75)','#e0bf63'];
+  let seed = 1337;
+  const rnd = () => (seed = (seed*9301+49297)%233280)/233280;
+  for(let i=0;i<182;i++){
+    const r = rnd();
+    // bias toward a rising habit: later cells brighter
+    const bias = i/182;
+    let lvl = 0;
+    const v = r*0.7 + bias*0.5;
+    if(v>1.05) lvl=4; else if(v>0.8) lvl=3; else if(v>0.55) lvl=2; else if(v>0.3) lvl=1; else lvl=0;
+    const cell = document.createElement('i');
+    cell.style.background = colors[lvl];
+    if(lvl===4) cell.style.boxShadow = '0 0 6px rgba(201,168,76,.35)';
+    grid.appendChild(cell);
+  }
+})();
+
+// --- OS detection for the hero CTA ---
+(function(){
+  const ua = navigator.userAgent;
+  const isWin = /Windows/i.test(ua);
+  const label = document.getElementById('heroDownloadLabel');
+  const sub = document.getElementById('heroDownloadSub');
+  if(isWin && label){ label.firstChild.textContent = 'Download for Windows'; }
+})();
+
+// --- Live latest-release asset resolution (always one click, never stale) ---
+(function(){
+  const macBtn = document.getElementById('dlMac');
+  const winBtn = document.getElementById('dlWin');
+  const hero = document.getElementById('heroDownload');
+  const nav = document.getElementById('navDownload');
+  const isWin = /Windows/i.test(navigator.userAgent);
+
+  fetch(`https://api.github.com/repos/${REPO}/releases/latest`)
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(rel => {
+      const assets = rel.assets || [];
+      const dmg = assets.find(a => /\.dmg$/i.test(a.name));
+      const exe = assets.find(a => /\.exe$/i.test(a.name));
+      if(dmg && macBtn) macBtn.href = dmg.browser_download_url;
+      if(exe && winBtn) winBtn.href = exe.browser_download_url;
+      // Point the big hero + nav buttons straight at the right installer for this OS.
+      const direct = isWin ? (exe && exe.browser_download_url) : (dmg && dmg.browser_download_url);
+      if(direct){
+        if(hero) hero.href = direct;
+        if(nav) nav.href = direct;
+      }
+    })
+    .catch(() => { /* no release yet — buttons fall back to the releases page */ });
+})();
+
+// --- Reveal on scroll ---
+(function(){
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+</script>
+</body>
+</html>

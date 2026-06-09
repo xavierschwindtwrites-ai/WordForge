@@ -22,7 +22,15 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({}),
-    new MakerDMG({}),
+    new MakerDMG({
+      // A clean drag-to-Applications window: the app icon on the left, the
+      // Applications shortcut on the right. One drag and you're installed.
+      name: 'WordForge',
+      overwrite: true,
+      additionalDMGOptions: {
+        window: { size: { width: 540, height: 380 } },
+      },
+    }),
     new MakerZIP({}, ['darwin']),
     new MakerDeb({}),
     new MakerRpm({}),
