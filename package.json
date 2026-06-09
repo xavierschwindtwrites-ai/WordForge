@@ -1,7 +1,7 @@
 {
   "name": "wordforge",
   "productName": "WordForge",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A beautiful, privacy-first desktop word count tracker for fiction authors",
   "main": ".webpack/main",
   "private": true,
