@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeScreen, onNavigate, onLogSessio
   <aside className="sidebar">
     <div className="sidebar-header">
       <span className="sidebar-logo"><Logo /></span>
-      <span className="sidebar-logo-text">WordForge</span>
+      <span className="sidebar-logo-text">Inkwell</span>
     </div>
 
     <button className="log-session-btn" onClick={onLogSession}>
@@ -42,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeScreen, onNavigate, onLogSessio
 
     <div className="sidebar-footer">
       <span className="sidebar-tagline">Write every day.</span>
-      <span className="sidebar-version">v0.1.2</span>
+      <span className="sidebar-version">v0.2.0</span>
     </div>
   </aside>
 );

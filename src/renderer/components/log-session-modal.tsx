@@ -20,10 +20,10 @@ const LogSessionModal: React.FC<LogSessionModalProps> = ({ initialProjectId, onL
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    window.wordforge.listProjects('active').then(list => {
+    window.inkwell.listProjects('active').then(list => {
       // Fall back to any project if there are no active ones.
       if (list.length === 0) {
-        window.wordforge.listProjects().then(all => {
+        window.inkwell.listProjects().then(all => {
           setProjects(all);
           if (projectId == null && all.length > 0) setProjectId(all[0].id);
         });
@@ -43,7 +43,7 @@ const LogSessionModal: React.FC<LogSessionModalProps> = ({ initialProjectId, onL
   const submit = async () => {
     if (!canSave || projectId == null) return;
     setSaving(true);
-    const result = await window.wordforge.logSession({
+    const result = await window.inkwell.logSession({
       project_id: projectId,
       words_written: Number(words),
       duration_minutes: duration === '' ? null : Number(duration),

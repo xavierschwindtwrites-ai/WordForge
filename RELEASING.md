@@ -1,4 +1,4 @@
-# Releasing WordForge
+# Releasing Inkwell
 
 Releases are built and published automatically by GitHub Actions when you push
 a version tag.
@@ -24,7 +24,7 @@ No Apple Developer account or code-signing certificate is required. macOS users
 clear the quarantine flag once after install:
 
 ```
-xattr -cr /Applications/WordForge.app
+xattr -cr /Applications/Inkwell.app
 ```
 
 `ci.yml` runs `npm run package` on every push/PR to `main` as a build sanity check.

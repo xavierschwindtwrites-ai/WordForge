@@ -105,10 +105,25 @@ function applySchema(d: SqlJsDatabase): void {
   }
 }
 
+/**
+ * One-time migration: the app shipped briefly as "WordForge" (v0.1.x). If a
+ * WordForge database exists and no Inkwell one does yet, carry the data over
+ * so nobody loses their streaks on upgrade. The original file is left intact.
+ */
+function migrateFromWordForge(target: string): void {
+  if (fs.existsSync(target)) return;
+  const oldDir = path.join(path.dirname(app.getPath('userData')), 'WordForge');
+  const oldDb = path.join(oldDir, 'wordforge.db');
+  if (fs.existsSync(oldDb)) {
+    fs.copyFileSync(oldDb, target);
+  }
+}
+
 export async function initDatabase(): Promise<void> {
   const initFn = loadSqlJs();
   const SQL = await initFn();
   const p = activeDbPath();
+  migrateFromWordForge(p);
 
   if (fs.existsSync(p)) {
     const fileBuffer = fs.readFileSync(p);
@@ -189,7 +204,7 @@ export function moveDatabase(newPath: string): string {
   // If they point at an existing directory, write our standard filename into it.
   let target = newPath;
   if (fs.existsSync(target) && fs.statSync(target).isDirectory()) {
-    target = path.join(target, 'wordforge.db');
+    target = path.join(target, 'inkwell.db');
   }
   fs.copyFileSync(from, target);
   setDbPath(target);

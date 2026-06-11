@@ -13,7 +13,7 @@ interface AppConfig {
 }
 
 function configPath(): string {
-  return path.join(app.getPath('userData'), 'wordforge-config.json');
+  return path.join(app.getPath('userData'), 'inkwell-config.json');
 }
 
 let cache: AppConfig | null = null;
@@ -39,7 +39,7 @@ function write(next: AppConfig): void {
 }
 
 export function defaultDbPath(): string {
-  return path.join(app.getPath('userData'), 'wordforge.db');
+  return path.join(app.getPath('userData'), 'inkwell.db');
 }
 
 export function getDbPath(): string {

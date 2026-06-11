@@ -18,9 +18,9 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack, onLogS
 
   const load = useCallback(async () => {
     const [p, s, m] = await Promise.all([
-      window.wordforge.getProgress(projectId),
-      window.wordforge.recentSessions(projectId, 10),
-      window.wordforge.listMilestones(projectId),
+      window.inkwell.getProgress(projectId),
+      window.inkwell.recentSessions(projectId, 10),
+      window.inkwell.listMilestones(projectId),
     ]);
     setProject(p);
     setSessions(s);
@@ -33,14 +33,14 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack, onLogS
 
   const newDraft = async () => {
     if (!confirm(`Start draft ${project.current_draft + 1}? Your progress bar resets; all session history is preserved.`)) return;
-    await window.wordforge.startNewDraft(projectId);
+    await window.inkwell.startNewDraft(projectId);
     await load();
     onChanged();
   };
 
   const changeStatus = async (status: 'active' | 'completed' | 'archived') => {
     setMenuOpen(false);
-    await window.wordforge.setProjectStatus(projectId, status);
+    await window.inkwell.setProjectStatus(projectId, status);
     await load();
     onChanged();
   };

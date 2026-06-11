@@ -1,4 +1,4 @@
-// All WordForge domain logic lives here: projects, sessions, streak math,
+// All Inkwell domain logic lives here: projects, sessions, streak math,
 // milestone detection, the pace calculator, and analytics aggregation. The
 // main process registers thin IPC handlers that call into these functions.
 

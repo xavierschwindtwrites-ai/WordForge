@@ -9,7 +9,7 @@ const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const Analytics: React.FC = () => {
   const [data, setData] = useState<AnalyticsData | null>(null);
 
-  useEffect(() => { window.wordforge.getAnalytics().then(setData); }, []);
+  useEffect(() => { window.inkwell.getAnalytics().then(setData); }, []);
 
   if (!data) return <div className="screen-loading">Loading…</div>;
 

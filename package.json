@@ -1,7 +1,7 @@
 {
-  "name": "wordforge",
-  "productName": "WordForge",
-  "version": "0.1.2",
+  "name": "inkwell",
+  "productName": "Inkwell",
+  "version": "0.2.0",
   "description": "A beautiful, privacy-first desktop word count tracker for fiction authors",
   "main": ".webpack/main",
   "private": true,

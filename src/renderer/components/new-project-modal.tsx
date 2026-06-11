@@ -21,7 +21,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({ onCreated, onClose })
   const submit = async () => {
     if (!title.trim() || saving) return;
     setSaving(true);
-    const project = await window.wordforge.createProject({
+    const project = await window.inkwell.createProject({
       title: title.trim(),
       genre: genre || null,
       target_word_count: target || 0,

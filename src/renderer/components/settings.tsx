@@ -10,7 +10,7 @@ const Settings: React.FC<SettingsProps> = ({ onChanged }) => {
   const [goal, setGoal] = useState(1000);
   const [toast, setToast] = useState<string | null>(null);
 
-  const load = () => window.wordforge.getSettings().then(s => { setSettings(s); setGoal(s.daily_goal); });
+  const load = () => window.inkwell.getSettings().then(s => { setSettings(s); setGoal(s.daily_goal); });
   useEffect(() => { load(); }, []);
 
   if (!settings) return <div className="screen-loading">Loading…</div>;
@@ -18,26 +18,26 @@ const Settings: React.FC<SettingsProps> = ({ onChanged }) => {
   const flash = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 2600); };
 
   const saveGoal = async () => {
-    await window.wordforge.setDailyGoal(goal);
+    await window.inkwell.setDailyGoal(goal);
     onChanged();
     flash('Daily goal saved.');
   };
 
   const toggleNano = async () => {
     const next = !settings.nano_mode;
-    await window.wordforge.setNanoMode(next);
+    await window.inkwell.setNanoMode(next);
     setSettings({ ...settings, nano_mode: next });
     onChanged();
   };
 
   const move = async () => {
-    const newPath = await window.wordforge.moveDatabase();
+    const newPath = await window.inkwell.moveDatabase();
     if (newPath) { await load(); flash('Database moved.'); }
   };
 
-  const exportCSV = async () => { const p = await window.wordforge.exportCSV(); if (p) flash('CSV exported.'); };
-  const exportJSON = async () => { const p = await window.wordforge.exportJSON(); if (p) flash('JSON exported.'); };
-  const exportSQLite = async () => { const p = await window.wordforge.exportSQLite(); if (p) flash('Database exported.'); };
+  const exportCSV = async () => { const p = await window.inkwell.exportCSV(); if (p) flash('CSV exported.'); };
+  const exportJSON = async () => { const p = await window.inkwell.exportJSON(); if (p) flash('JSON exported.'); };
+  const exportSQLite = async () => { const p = await window.inkwell.exportSQLite(); if (p) flash('Database exported.'); };
 
   return (
     <div className="screen settings">
@@ -86,9 +86,9 @@ const Settings: React.FC<SettingsProps> = ({ onChanged }) => {
       <section className="card">
         <h2 className="card-title">Sync (the honest version)</h2>
         <p className="muted">
-          WordForge has no cloud and no accounts — by design. If you want your data on more than one
-          computer, use <strong>Move database…</strong> above to place the <code>wordforge.db</code> file
-          inside your iCloud Drive, Dropbox, or other sync folder. WordForge will read and write there
+          Inkwell has no cloud and no accounts — by design. If you want your data on more than one
+          computer, use <strong>Move database…</strong> above to place the <code>inkwell.db</code> file
+          inside your iCloud Drive, Dropbox, or other sync folder. Inkwell will read and write there
           directly. There’s no magic: it’s just a file in a folder your sync service watches. Avoid editing
           on two machines at the same time, since the last save wins.
         </p>
@@ -106,7 +106,7 @@ const Settings: React.FC<SettingsProps> = ({ onChanged }) => {
 
       <section className="card about-card">
         <h2 className="card-title">About</h2>
-        <p className="muted">WordForge v{settings.version} · MIT License</p>
+        <p className="muted">Inkwell v{settings.version} · MIT License</p>
         <p className="muted">A privacy-first word count tracker for fiction authors.</p>
         <a
           className="link-btn"

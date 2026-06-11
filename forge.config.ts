@@ -30,7 +30,7 @@ const config: ForgeConfig = {
     new MakerDMG({
       // A clean drag-to-Applications window: the app icon on the left, the
       // Applications shortcut on the right. One drag and you're installed.
-      name: 'WordForge',
+      name: 'Inkwell',
       icon: './icons/icon.icns',
       overwrite: true,
       additionalDMGOptions: {

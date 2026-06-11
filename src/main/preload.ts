@@ -6,7 +6,7 @@ import type {
   ProjectStatus,
 } from '../types/models';
 
-contextBridge.exposeInMainWorld('wordforge', {
+contextBridge.exposeInMainWorld('inkwell', {
   // Projects
   listProjects: (status?: ProjectStatus) => ipcRenderer.invoke('project:list', status),
   getProject: (id: number) => ipcRenderer.invoke('project:get', id),

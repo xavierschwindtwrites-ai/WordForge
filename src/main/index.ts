@@ -70,7 +70,7 @@ function registerIpcHandlers(): void {
   ipcMain.handle('db:path', () => currentDbPath());
   ipcMain.handle('db:move', async () => {
     const res = await dialog.showOpenDialog({
-      title: 'Choose a folder for your WordForge database',
+      title: 'Choose a folder for your Inkwell database',
       properties: ['openDirectory', 'createDirectory'],
       buttonLabel: 'Move database here',
     });
@@ -82,7 +82,7 @@ function registerIpcHandlers(): void {
   ipcMain.handle('export:csv', async () => {
     const res = await dialog.showSaveDialog({
       title: 'Export sessions as CSV',
-      defaultPath: 'wordforge-sessions.csv',
+      defaultPath: 'inkwell-sessions.csv',
       filters: [{ name: 'CSV', extensions: ['csv'] }],
     });
     if (res.canceled || !res.filePath) return null;
@@ -92,7 +92,7 @@ function registerIpcHandlers(): void {
   ipcMain.handle('export:json', async () => {
     const res = await dialog.showSaveDialog({
       title: 'Export full database as JSON',
-      defaultPath: 'wordforge-backup.json',
+      defaultPath: 'inkwell-backup.json',
       filters: [{ name: 'JSON', extensions: ['json'] }],
     });
     if (res.canceled || !res.filePath) return null;
@@ -102,7 +102,7 @@ function registerIpcHandlers(): void {
   ipcMain.handle('export:sqlite', async () => {
     const res = await dialog.showSaveDialog({
       title: 'Export raw SQLite database',
-      defaultPath: 'wordforge.db',
+      defaultPath: 'inkwell.db',
       filters: [{ name: 'SQLite', extensions: ['db', 'sqlite'] }],
     });
     if (res.canceled || !res.filePath) return null;

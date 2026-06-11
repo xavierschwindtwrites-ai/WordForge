@@ -13,7 +13,7 @@ import type {
   Settings,
 } from './models';
 
-interface WordForgeAPI {
+interface InkwellAPI {
   // Projects
   listProjects(status?: ProjectStatus): Promise<Project[]>;
   getProject(id: number): Promise<Project | null>;
@@ -52,6 +52,6 @@ interface WordForgeAPI {
 
 declare global {
   interface Window {
-    wordforge: WordForgeAPI;
+    inkwell: InkwellAPI;
   }
 }

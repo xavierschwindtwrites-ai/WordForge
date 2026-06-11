@@ -15,7 +15,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogSession, onOpenProject, onNa
   const [data, setData] = useState<DashboardData | null>(null);
 
   useEffect(() => {
-    window.wordforge.getDashboard().then(setData);
+    window.inkwell.getDashboard().then(setData);
   }, []);
 
   if (!data) return <div className="screen-loading">Loading…</div>;

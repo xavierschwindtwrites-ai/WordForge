@@ -1,7 +1,7 @@
-# WordForge
+# Inkwell
 
 A beautiful, privacy-first desktop word count tracker and productivity tool for
-fiction authors. WordForge is 100% local — no backend, no cloud, no accounts.
+fiction authors. Inkwell is 100% local — no backend, no cloud, no accounts.
 Your manuscript data lives in a single SQLite file on your own machine.
 
 Built with **Electron + React + TypeScript + sql.js**, distributed as an
@@ -44,7 +44,7 @@ Requires Node 18+.
   (all domain logic: streaks, milestones, pace, analytics).
 - `src/renderer/` — React UI (screens under `components/`, theme in
   `styles/global.css`).
-- `src/types/` — shared models and the typed `window.wordforge` API.
+- `src/types/` — shared models and the typed `window.inkwell` API.
 
 sql.js is loaded from its self-contained `sql-asm.js` bundle via a runtime
 require (bypassing webpack) and copied into the packaged app as an
@@ -52,8 +52,8 @@ require (bypassing webpack) and copied into the packaged app as an
 
 ## Privacy & sync
 
-WordForge never talks to the network. To sync across machines, use
-**Settings → Move database…** to place `wordforge.db` inside an iCloud Drive,
+Inkwell never talks to the network. To sync across machines, use
+**Settings → Move database…** to place `inkwell.db` inside an iCloud Drive,
 Dropbox, or other sync folder — it's just a file in a folder. Don't edit on two
 machines at once; the last save wins.
 

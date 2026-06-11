@@ -17,9 +17,9 @@ const ProjectLibrary: React.FC<ProjectLibraryProps> = ({ onOpenProject, onChange
   const [showNew, setShowNew] = useState(false);
 
   const load = useCallback(async (status: ProjectStatus) => {
-    const list = await window.wordforge.listProjects(status);
+    const list = await window.inkwell.listProjects(status);
     const withProgress = await Promise.all(
-      list.map(p => window.wordforge.getProgress(p.id)),
+      list.map(p => window.inkwell.getProgress(p.id)),
     );
     setProjects(withProgress.filter((p): p is ProjectProgress => p !== null));
   }, []);
